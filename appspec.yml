@@ -1,10 +1,26 @@
 version: 0.0
 os: linux
 files:
-  - source: /index.html
+  - source: scripts/
+    destination: /var/www/html/scripts/
+  - source: README.md
     destination: /var/www/html/
+  - source: index.html
+    destination: /var/www/html/
+permissions:
+  - object: /var/www/html/scripts/
+    pattern: "**"
+    mode: 755
 hooks:
   BeforeInstall:
     - location: scripts/install_dependencies
+      timeout: 300
+      runas: root
+  AfterInstall:
+    - location: scripts/start_server
+      timeout: 300
+      runas: root
+  ApplicationStop:
+    - location: scripts/stop_server
       timeout: 300
       runas: root
